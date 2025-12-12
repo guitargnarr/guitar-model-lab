@@ -21,13 +21,14 @@ app = FastAPI(
 )
 
 # CORS for guitar.projectlavos.com
+# NOTE: Cannot use allow_credentials=True with wildcard origins (security vulnerability)
+# Fixed 2025-12-12 based on Mirador security audit
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://guitar.projectlavos.com",
         "http://localhost:5173",
         "http://localhost:3000",
-        "*",  # Allow all for testing
     ],
     allow_credentials=True,
     allow_methods=["*"],
