@@ -66,11 +66,11 @@ open riff.gp5
 - Mixolydian, Harmonic Minor, Melodic Minor, Locrian
 
 **Patterns (8):**
-- ascending, descending, pedal, sequence
-- thirds, fourths, pentatonic_box, three_note_per_string
+- ascending, descending, pedal, arpeggio
+- random, 3nps, power_chords, progression
 
 **Tunings (4):**
-- standard, drop_d, half_step_down, full_step_down
+- standard, drop_d, drop_c, half_step_down
 
 ## Why Deterministic Python (Not LLM)
 
