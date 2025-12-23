@@ -3,3 +3,6 @@ uvicorn[standard]==0.34.0
 pydantic==2.10.3
 pyguitarpro==0.10.0
 midiutil==1.2.1
+numpy>=1.24.0
+soundfile>=0.12.0
+scipy>=1.10.0
