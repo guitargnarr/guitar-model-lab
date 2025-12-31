@@ -1,7 +1,6 @@
 """
 Tests for guitar_theory module
 """
-import pytest
 from guitar_theory import generate_tab, SCALES, TUNINGS
 
 
@@ -61,9 +60,9 @@ class TestTabGeneration:
 
     def test_generate_tab_contains_six_strings(self):
         tab = generate_tab(root="E", scale="phrygian", pattern="ascending")
-        lines = [l for l in tab.split('\n') if l.strip()]
+        lines = [line for line in tab.split('\n') if line.strip()]
         # Should have 6 string lines
-        string_lines = [l for l in lines if '|' in l]
+        string_lines = [line for line in lines if '|' in line]
         assert len(string_lines) >= 6
 
     def test_generate_tab_different_patterns(self):
