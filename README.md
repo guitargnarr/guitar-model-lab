@@ -1,6 +1,20 @@
 # Guitar Model Lab
 
-Production API for generating Guitar Pro 5 (.gp5) files from scale/pattern parameters.
+<p align="center">
+  <img src=".github/guitar-hero.png" alt="FretVision - Guitar Learning Platform" width="800">
+</p>
+
+<p align="center">
+  <strong>Production API for generating Guitar Pro 5 (.gp5) files from scale/pattern parameters.</strong>
+</p>
+
+<p align="center">
+  <a href="https://guitar.projectlavos.com">Live Demo</a> ·
+  <a href="https://guitar-model-lab.onrender.com/docs">API Docs</a> ·
+  <a href="#api-endpoints">Endpoints</a>
+</p>
+
+---
 
 **Live API:** https://guitar-model-lab.onrender.com
 
