@@ -243,5 +243,102 @@ def main():
         sys.exit(1)
 
 
+def create_drum_gp5_file(drum_bars: list,
+                          title: str = "Generated Drums",
+                          tempo: int = 120,
+                          output_path: str = None) -> str:
+    """
+    Create a Guitar Pro 5 file from drum bar data.
+
+    Args:
+        drum_bars: List of DrumBar objects from drum_theory
+        title: Song title
+        tempo: BPM
+        output_path: Output file path
+
+    Returns:
+        Path to created .gp5 file
+    """
+    from drum_theory import DRUM_MAP
+
+    song = Song()
+    song.title = title
+    song.tempo = tempo
+    song.artist = "Guitar Model Lab"
+
+    # Configure track as drums
+    track = song.tracks[0]
+    track.name = "Drums"
+    track.channel.instrument = 0  # Drums
+    track.channel.channel = 9  # MIDI channel 10 (0-indexed = 9) for drums
+    track.isPercussionTrack = True
+
+    # For drums, we need different string setup
+    # GP uses "strings" for drum note definitions
+    # Clear existing strings and set up for drums
+    track.strings = []
+
+    # Add drum "strings" (each represents a drum piece)
+    # We need at least as many strings as different drum pieces we use
+    drum_midi_notes = [36, 38, 42, 46, 49, 51, 50, 47, 45, 43, 52, 55]
+    for i, midi_note in enumerate(drum_midi_notes):
+        string = guitarpro.models.GuitarString(number=i + 1, value=midi_note)
+        track.strings.append(string)
+
+    num_measures = len(drum_bars)
+
+    # Add measure headers
+    while len(song.measureHeaders) < num_measures:
+        header = MeasureHeader()
+        header.number = len(song.measureHeaders) + 1
+        song.measureHeaders.append(header)
+
+        measure = Measure(track, header)
+        voice = Voice(measure)
+        measure.voices.append(voice)
+        track.measures.append(measure)
+
+    # Fill in the drum hits
+    for measure_num, drum_bar in enumerate(drum_bars):
+        measure = track.measures[measure_num]
+        voice = measure.voices[0]
+        voice.beats.clear()
+
+        # Group hits by position (16th notes)
+        hits_by_pos = {}
+        for hit in drum_bar.hits:
+            if hit.position not in hits_by_pos:
+                hits_by_pos[hit.position] = []
+            hits_by_pos[hit.position].append(hit)
+
+        # Create 16 beats (16th notes per bar in 4/4)
+        for pos in range(1, 17):
+            beat = Beat(voice)
+            beat.duration = Duration()
+            beat.duration.value = 16  # 16th note
+
+            if pos in hits_by_pos:
+                for hit in hits_by_pos[pos]:
+                    if hit.drum in DRUM_MAP:
+                        note = Note(beat)
+                        # For drums, value is the MIDI note number
+                        note.value = DRUM_MAP[hit.drum]
+                        note.string = 1  # Drums use string 1
+                        note.velocity = hit.velocity
+                        note.type = NoteType.normal
+                        beat.notes.append(note)
+
+            if not beat.notes:
+                beat.status = guitarpro.BeatStatus.rest
+
+            voice.beats.append(beat)
+
+    if output_path is None:
+        output_path = f"{title.replace(' ', '_')}.gp5"
+
+    guitarpro.write(song, output_path)
+    return output_path
+
+
 if __name__ == '__main__':
     main()

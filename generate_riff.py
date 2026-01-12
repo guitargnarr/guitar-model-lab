@@ -20,7 +20,7 @@ import urllib.parse
 from validate_tab import validate_tab_output, correct_tab_output
 
 # Model to use
-MODEL = "guitar_expert_precise"
+MODEL = "master_guitar_instructor"
 
 # Available scales for random mode
 SCALES = [
